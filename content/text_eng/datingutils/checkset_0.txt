@@ -1,0 +1,2 @@
+has_pants 1
+has_hat 0

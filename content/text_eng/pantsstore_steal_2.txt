@@ -1,0 +1,11 @@
+sm1
+sa1g
+
+As you leave, a green square begins to chase you down for stealing the pants! What shall you do?
+
+Jump into the river
+pantsstore_steal_3a.txt
+Escape via helicopter
+pantsstore_steal_3b.txt
+[check has_hat 1]Fly away via Mets hat propeller
+pantsstore_steal_3c.txt

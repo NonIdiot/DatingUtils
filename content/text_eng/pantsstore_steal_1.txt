@@ -1,0 +1,9 @@
+sm1
+pants_badpants
+
+You pick up a pair of pants. They're odd looking, but they'll work.
+
+[var has_pants 1]Steal them
+pantsstore_steal_2.txt
+[var has_pants 1]Buy them
+pantsstore_buy_2.txt

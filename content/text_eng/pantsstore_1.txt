@@ -1,0 +1,10 @@
+sm1
+none
+
+[overlayset 0]You enter the Pants Store, land of the Pants. While having a mate is your goal,
+having a pair of pants is a good first step to achieve such a task.
+
+Pick up the first pair of pants you see
+pantsstore_steal_1.txt
+Look around for a good pair of pants
+pantsstore_buy_1.txt

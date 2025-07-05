@@ -1,0 +1,8 @@
+sm1
+none
+
+You escape on your trusty portable helicopter, with whatever you had in tow.
+Suddenly, you land in Shoreline, land of longevity and water.
+
+Sit around for a bit
+pantsstore_outside_shoreline.txt

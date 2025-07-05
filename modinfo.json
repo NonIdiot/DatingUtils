@@ -1,0 +1,13 @@
+{
+	"id": "nassoc.datingutils",
+	"name": "NonIdiot's Dating Sim Utils",
+	"version": "0.0.1",
+	"hide_version": false,
+	"authors": "NonIdiot",
+	"description": "Adds some fun utilities for Dating Sim developers, but in a prooooobably scuffed way.",
+	"requirements": ["moreslugcats"],
+	"requirements_names": ["More Slugcats"],
+	"priorities": [],
+	"checksum_override_version": false,
+	"tags": ["Downpour", "Watcher"]
+}

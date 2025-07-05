@@ -1,0 +1,9 @@
+sm1
+pants_cashier
+
+You bring your item to the counter, and buy it, only costing 1 pearl, which you
+luckily had stored in your throat. You then leave the store and walk to Shoreline,
+land of the water and other things.
+
+Sit around for a bit
+pantsstore_outside_shoreline.txt

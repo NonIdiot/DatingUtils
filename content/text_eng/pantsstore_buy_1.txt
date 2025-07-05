@@ -1,0 +1,11 @@
+sm1
+none
+
+You look around, and see two things you like: A rugged pair of pants, and a Mets hat.
+
+[var has_pants 1]Buy the pants
+pantsstore_buy_2.txt
+[var has_hat 1]Buy the hat
+pantsstore_buy_2.txt
+[varset getboth]Steal them both
+pantsstore_steal_2.txt

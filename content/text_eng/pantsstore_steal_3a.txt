@@ -1,0 +1,9 @@
+sm5
+sa1g
+
+You jump off a bridge into the river, promptly dying upon contact.
+
+RESTART
+start.txt
+
+FADE
