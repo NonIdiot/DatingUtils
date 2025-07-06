@@ -249,6 +249,7 @@ namespace DatingUtils
                         }
                         else if (numm == 3)
                         {
+                            self.messageButtons[i].GetCustomData().setToWhat = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + 1, filename);
                             begoneThee = true;
                             string path = AssetManager.ResolveFilePath(string.Concat(new string[]
                             {
@@ -307,15 +308,20 @@ namespace DatingUtils
                                     self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
                                 }
 
-                                Logger.Log(LogLevel.Info, "AAAAE "+self.messageButtons[i].GetCustomData().whichVarInVarSet.Length);
+                                //Logger.Log(LogLevel.Info, "AAAAE "+self.messageButtons[i].GetCustomData().whichVarInVarSet.Length);
                                 for (int j = 0; j<self.messageButtons[i].GetCustomData().whichVarInVarSet.Length; j++)
                                 {
                                     int aBul = allVarReturn(self.messageButtons[i].GetCustomData().whichVarInVarSet[j]);
                                     bool laBool = aBul == self.messageButtons[i].GetCustomData().setToWhatInVarSet[j];
                                     Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Checkset \""+self.messageButtons[i].menuLabel.text+"\" check #"+j+" (var \""+self.messageButtons[i].GetCustomData().whichVarInVarSet[j]+"\"=="+self.messageButtons[i].GetCustomData().setToWhatInVarSet[j]+") came back with "+laBool+" (var returned "+aBul+")");
-                                    if (!laBool)
+                                    if (!laBool && self.messageButtons[i].GetCustomData().setToWhat != 1)
                                     {
                                         begoneThee = true;
+                                        break;
+                                    }
+                                    if (laBool && self.messageButtons[i].GetCustomData().setToWhat == 1)
+                                    {
+                                        begoneThee = false;
                                         break;
                                     }
                                 }

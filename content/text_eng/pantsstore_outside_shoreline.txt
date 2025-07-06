@@ -3,11 +3,11 @@ none
 
 Suddenly, a drip of wetness hits you. You look around and see that what you bought is now wet!
 
-[checkset 0] Clean your pants and go into a nearby cave
+[checkset 0 0] Clean your pants and go into a nearby cave
 east_2.txt
-[checkset 1] Clean your hat and go into a nearby cave
+[checkset 1 0] Clean your hat and go into a nearby cave
 east_2.txt
-[checkset 2] Clean both your pants and hat and go into a nearby cave
+[checkset 2 0] Clean both your pants and hat and go into a nearby cave
 east_2.txt
-[checkset 3] what the fuck this shouldn't show up
+[checkset 3 0] what the fuck this shouldn't show up
 east_2.txt

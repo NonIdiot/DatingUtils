@@ -1,7 +1,7 @@
 {
 	"id": "nassoc.datingutils",
 	"name": "NonIdiot's Dating Sim Utils",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"hide_version": false,
 	"authors": "NonIdiot",
 	"description": "Adds some fun utilities for Dating Sim developers, but in a prooooobably scuffed way.",
