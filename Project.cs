@@ -67,6 +67,8 @@ namespace DatingUtils
 
         public string[][] losOverlaysData = [];
         public MenuIllustration[] losOverlays = [];
+        public bool shouldILetGrafUpdateWork = true;
+        public bool shouldAlsoLetUpdateWork = false;
         
         private bool weInitializedYet = false;
         public void OnEnable()
@@ -85,6 +87,8 @@ namespace DatingUtils
                     On.MoreSlugcats.DatingSim.InitNextFile += IInitNextFile;
                     On.MoreSlugcats.DatingSim.Singal += IPressButton;
                     On.MoreSlugcats.DatingSim.NewMessage_string_int += INewMessage;
+                    On.MoreSlugcats.DatingSim.GrafUpdate += ThouShaltNotUpdate;
+                    On.MoreSlugcats.DatingSim.Update += ThouShallUpdate;
                 }
 
                 weInitializedYet = true;
@@ -111,12 +115,28 @@ namespace DatingUtils
                 Plugin.Log(LogLevel.Info, "[NonIdiot's DatingUtils] All Overlaysets reset!");
             }
 
+            shouldILetGrafUpdateWork = false;
             orig(self, filename);
+            shouldILetGrafUpdateWork = true;
             
             if (filename == "start.txt")
             {
                 allVariables = new Dictionary<string, int>();
                 Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Set all variables to a default of 0");
+                if (!DatingUtilsConfig.examplePathOn.Value)
+                {
+                    for (int i = 0; i<self.messageButtons.Count;i++)
+                    {
+                        if (stroin(self.messageButtons[i].menuLabel.text) == stroin("To The Pants Store"))
+                        {
+                            Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Hiding button \""+self.messageButtons[i].menuLabel.text+"\" because the configuration option for showing it is False");
+                            self.messageButtons[i].RemoveSprites();
+                            self.pages[0].selectables.Remove(self.messageButtons[i]);
+                            self.pages[0].subObjects.Remove(self.messageButtons[i]);
+                            self.messageButtons[i].GetCustomData().dead = true;
+                        }
+                    }
+                }
             }
             
             if (!self.creditsLabelLeft.text.Contains("Additional functionality added by NonIdiot"))
@@ -501,7 +521,7 @@ namespace DatingUtils
                 
             }
             
-            // Overlay application (for when there is OverlayData but not Overlays)
+            // Overlay data application (for when there is OverlayData but not Overlays)
             if (losOverlaysData.Length > losOverlays.Length)
             {
                 for (int i = losOverlays.Length; i < losOverlaysData.Length; i++)
@@ -519,23 +539,8 @@ namespace DatingUtils
                 }
             }
 
-            for (int i=0;i<losOverlaysData.Length;i++)
-            {
-                try
-                {
-                    bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
-                    losOverlays[i].pos = new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5]) + (abettttt ? 0 : 9999));
-                    if (abettttt)
-                    {
-                        Logger.Log(LogLevel.Info,
-                            "[NonIdiot's DatingUtils] Applied overlay \"content/text_" + self.manager.rainWorld.inGameTranslator.currentLanguage + "/datingutils/overlayset_" + losOverlaysData[i][6] + ".txt\" line " + losOverlaysData[i][7]);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log(LogLevel.Error, "[NonIdiot's DatingUtils] EXCEPTION! Seems that file \"content/text_" +  self.manager.rainWorld.inGameTranslator.currentLanguage + "/datingutils/overlayset_" + losOverlaysData[i][6] + ".txt\" line " + losOverlaysData[i][7] + " failed (in a weird way, to make it worse). Is the data inputted correctly? The exception says: "+ex);
-                }
-            }
+            // General overlay application (showing the overlays)
+            shouldAlsoLetUpdateWork = true;
 
             // Finally, applying the changes
             self.GrafUpdate(0f);
@@ -585,6 +590,42 @@ namespace DatingUtils
         private void INewMessage(DatingSim.orig_NewMessage_string_int orig, MoreSlugcats.DatingSim self, string text, int extraLinger)
         {
             orig(self,(text.Contains("]") ? text.Split("]".ToCharArray())[1] : text),extraLinger);
+        }
+
+        private void ThouShaltNotUpdate(DatingSim.orig_GrafUpdate orig, MoreSlugcats.DatingSim self, float timeStacker)
+        {
+            if (shouldILetGrafUpdateWork)
+            {
+                orig(self, timeStacker);
+            }
+
+            shouldILetGrafUpdateWork = true;
+        }
+
+        private void ThouShallUpdate(DatingSim.orig_Update orig, MoreSlugcats.DatingSim self)
+        {
+            if (shouldAlsoLetUpdateWork)
+            {
+                for (int i=0;i<losOverlaysData.Length;i++)
+                {
+                    try
+                    {
+                        bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
+                        losOverlays[i].pos = new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), (abettttt ? self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5]) : 9999));
+                        if (abettttt)
+                        {
+                            Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Applied overlay \"content/text_" + self.manager.rainWorld.inGameTranslator.currentLanguage + "/datingutils/overlayset_" + losOverlaysData[i][6] + ".txt\" line " + losOverlaysData[i][7]);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(LogLevel.Error, "[NonIdiot's DatingUtils] EXCEPTION! Seems that file \"content/text_" +  self.manager.rainWorld.inGameTranslator.currentLanguage + "/datingutils/overlayset_" + losOverlaysData[i][6] + ".txt\" line " + losOverlaysData[i][7] + " failed (in a weird way, to make it worse). Is the data inputted correctly? The exception says: "+ex);
+                    }
+                }
+                shouldAlsoLetUpdateWork = false;
+            }
+
+            orig(self);
         }
 
         private void PostModsInitt(On.RainWorld.orig_PostModsInit orig, RainWorld self)
@@ -741,6 +782,11 @@ namespace DatingUtils
             if (MachineConnector.GetRegisteredOI(Plugin.MOD_ID) != Instance)
                 MachineConnector.SetRegisteredOI(Plugin.MOD_ID, Instance);
         }
+        
+        public static Configurable<bool> examplePathOn = Instance.config.Bind("examplePathOn", false,
+            new ConfigurableInfo("Whether the pants-related path (made as an example for mod devs) is enabled.  Default false.")
+        );
+        
         // Menus and stuff
         public override void Initialize()
         {
@@ -751,6 +797,9 @@ namespace DatingUtils
 
             Tabs[0].AddItems([
                 new OpLabel(30f, 560f, "NonIdiot's Dating Sim Utils Config - Main Page", true),
+                new OpCheckBox(examplePathOn, new Vector2(30f, 500f)) { description = examplePathOn.info.description },
+                new OpLabel(60f, 500f, "Example Path Enabled"),
+                new OpLabel(30f, 450f, "...there's nothing else to configure here, sorry"),
             ]);
         }
 
