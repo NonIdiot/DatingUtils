@@ -47,7 +47,7 @@ namespace DatingUtils
         }
     }
 
-    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "0.0.1")]
+    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.1")]
     internal class Plugin : BaseUnityPlugin
     {
         public const string MOD_ID = "nassoc.datingutils";
@@ -386,7 +386,7 @@ namespace DatingUtils
                 }
             }
             
-            // Overlay nonsense (aka setup of overlay data)
+            // File pre-loading for all Overlay-related stuff
             string path2 = AssetManager.ResolveFilePath(string.Concat(new string[]
             {
                 "Content",
@@ -423,9 +423,21 @@ namespace DatingUtils
                 }
             }
 
+            // Expanded Dating Simulator Engine compat
+            int whereOverlayLine = -1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == "" && i+1<array.Length)
+                {
+                    whereOverlayLine = i+1;
+                    break;
+                }
+            }
+
+            // Overlay nonsense (aka setup of overlay data)
             bool bonanar = true;
             string woga = "[overlayset ";
-            if (woga.Length+2 > array[3].Length)
+            if (whereOverlayLine == -1 || woga.Length+2 > array[whereOverlayLine].Length)
             {
                 bonanar = false;
             }
@@ -433,7 +445,7 @@ namespace DatingUtils
             {
                 for (int i=0;i<woga.Length;i++)
                 {
-                    if (array[3][i] != woga[i])
+                    if (array[whereOverlayLine][i] != woga[i])
                     {
                         bonanar = false;
                         break;
@@ -442,7 +454,7 @@ namespace DatingUtils
             }
             if (bonanar)
             {
-                if (array[3][12].ToString() == "-" && array[3][13].ToString() == "1")
+                if (array[whereOverlayLine][12].ToString() == "-" && array[whereOverlayLine][13].ToString() == "1")
                 {
                     for (int i = 0; i < losOverlays.Length; i++)
                     {
@@ -455,7 +467,7 @@ namespace DatingUtils
                 }
                 else
                 {
-                    string boogeru = stringToSmol(array[3], 12, filename);
+                    string boogeru = stringToSmol(array[whereOverlayLine], 12, filename);
                     string path = AssetManager.ResolveFilePath(string.Concat(new string[]
                     {
                         "Content",
@@ -509,6 +521,7 @@ namespace DatingUtils
                                 losOverlaysData = losOverlaysData.AddToArray(jaja);
                                 losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(boogeru);
                                 losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(i.ToString());
+                                //Plugin.Log(LogLevel.Info, "ahe "+losOverlaysData[losOverlaysData.Length - 1]);
                             }
                             else
                             {
@@ -543,7 +556,9 @@ namespace DatingUtils
             shouldAlsoLetUpdateWork = true;
 
             // Finally, applying the changes
+            //Logger.Log(LogLevel.Info, "ua");
             self.GrafUpdate(0f);
+            //Logger.Log(LogLevel.Info, "au");
         }
 
         private void IPressButton(DatingSim.orig_Singal orig, MoreSlugcats.DatingSim self, MenuObject sender, string message)
@@ -610,8 +625,9 @@ namespace DatingUtils
                 {
                     try
                     {
+                        //Logger.Log(LogLevel.Info, "awawag " + losOverlaysData[i][2]+" "+losOverlaysData[i].Length);
                         bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
-                        losOverlays[i].pos = new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), (abettttt ? self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5]) : 9999));
+                        losOverlays[i].pos = new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), (abettttt ? self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5]) : 2000));
                         if (abettttt)
                         {
                             Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Applied overlay \"content/text_" + self.manager.rainWorld.inGameTranslator.currentLanguage + "/datingutils/overlayset_" + losOverlaysData[i][6] + ".txt\" line " + losOverlaysData[i][7]);

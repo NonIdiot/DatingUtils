@@ -1,13 +1,13 @@
 {
 	"id": "nassoc.datingutils",
 	"name": "NonIdiot's Dating Sim Utils",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"hide_version": false,
 	"authors": "NonIdiot",
-	"description": "Adds some fun utilities for Dating Sim developers, but in a prooooobably scuffed way.",
+	"description": "Adds some additional mechanics to the Rain World Dating Simulator that are great for mod devs, without being absurdly scuffed.\n\nMainly, having variables that can be set/checked ingame (with things such as variable-specific options), as well as overlays that depend on said variables. If you want to learn more, check out the [url=https://docs.google.com/document/d/1xMf0WQ-wFQBoiSx2hwzVvg-4V2QI4-nJDWt6eluDzBk/edit?tab=t.0] documentation [/url]! Additionally, if you look into the mod files, you can find an example of most of the features, as well as the Remix interface providing a way to see these examples in action.\n\nAny bug reports can be filed [url=https://github.com/NonIdiot/DatingUtils/issues] on the Github [/url].",
 	"requirements": ["moreslugcats"],
 	"requirements_names": ["More Slugcats"],
-	"priorities": [],
+	"priorities": ["expandeddatingsimengine"],
 	"checksum_override_version": false,
-	"tags": ["Downpour", "Watcher"]
+	"tags": ["Game Mechanics", "Dependency", "Tools", "Downpour", "Watcher"]
 }
