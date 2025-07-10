@@ -116,8 +116,8 @@ namespace DatingUtils
             }
 
             shouldILetGrafUpdateWork = false;
+            shouldAlsoLetUpdateWork = false;
             orig(self, filename);
-            shouldILetGrafUpdateWork = true;
             
             if (filename == "start.txt")
             {
@@ -516,16 +516,30 @@ namespace DatingUtils
                         for (int i = 0;i<fileArray.Length;i++)
                         {
                             string[] jaja = fileArray[i].Split(" ".ToCharArray()[0]);
-                            if (jaja.Length == 6)
+                            if (stroin(jaja[0]) != "" && stroin(jaja[0]) != stroin("//"))
                             {
-                                losOverlaysData = losOverlaysData.AddToArray(jaja);
-                                losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(boogeru);
-                                losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(i.ToString());
-                                //Plugin.Log(LogLevel.Info, "ahe "+losOverlaysData[losOverlaysData.Length - 1]);
+                                if (jaja.Length == 6)
+                                {
+                                    losOverlaysData = losOverlaysData.AddToArray(jaja);
+                                    losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(boogeru);
+                                    losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(i.ToString());
+                                    //Plugin.Log(LogLevel.Info, "ahe "+losOverlaysData[losOverlaysData.Length - 1]);
+                                    //Plugin.Log(LogLevel.Info, "a overlayset_" + boogeru + " line "+i+" is length "+losOverlaysData.Length);
+                                }
+                                else if (jaja.Length == 2 && losOverlaysData.Length != 0)
+                                {
+                                    losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(jaja[0]);
+                                    losOverlaysData[losOverlaysData.Length - 1] = losOverlaysData[losOverlaysData.Length - 1].AddToArray(jaja[1]);
+                                    //Plugin.Log(LogLevel.Info, "b overlayset_" + boogeru + " line "+i+" is length "+losOverlaysData.Length);
+                                }
+                                else
+                                {
+                                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in a nonexistent Overlayset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/overlayset_"+boogeru+".txt\" line "+i+" has "+jaja.Length+" entries instead of 6.");
+                                }
                             }
                             else
                             {
-                                Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in a nonexistent Overlayset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/overlayset_"+boogeru+".txt\" line "+i+" has "+jaja.Length+" entries instead of 6.");
+                                Plugin.Log(LogLevel.Info, "c overlayset_" + boogeru + " line "+i+" is length "+losOverlaysData.Length);
                             }
                         }
                         Plugin.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Overlayset \"overlayset_"+boogeru+"\" initialized!");
@@ -541,7 +555,7 @@ namespace DatingUtils
                 {
                     try
                     {
-                        losOverlays = losOverlays.AddToArray(new MenuIllustration(self, self.scene, "Content", losOverlaysData[i][3], new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5])), true, true));
+                        losOverlays = losOverlays.AddToArray(new MenuIllustration(self, self.scene, "Content", losOverlaysData[i][3], new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), 9999 + int.Parse(losOverlaysData[i][5])), true, true));
                     }
                     catch (Exception ex)
                     {
@@ -552,13 +566,14 @@ namespace DatingUtils
                 }
             }
 
-            // General overlay application (showing the overlays)
-            shouldAlsoLetUpdateWork = true;
-
             // Finally, applying the changes
             //Logger.Log(LogLevel.Info, "ua");
             self.GrafUpdate(0f);
             //Logger.Log(LogLevel.Info, "au");
+
+            // General overlay application (showing the overlays)
+            shouldAlsoLetUpdateWork = true;
+            shouldILetGrafUpdateWork = true;
         }
 
         private void IPressButton(DatingSim.orig_Singal orig, MoreSlugcats.DatingSim self, MenuObject sender, string message)
@@ -614,7 +629,7 @@ namespace DatingUtils
                 orig(self, timeStacker);
             }
 
-            shouldILetGrafUpdateWork = true;
+            //shouldILetGrafUpdateWork = true;
         }
 
         private void ThouShallUpdate(DatingSim.orig_Update orig, MoreSlugcats.DatingSim self)
@@ -627,6 +642,19 @@ namespace DatingUtils
                     {
                         //Logger.Log(LogLevel.Info, "awawag " + losOverlaysData[i][2]+" "+losOverlaysData[i].Length);
                         bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
+                        if (abettttt && losOverlaysData[i].Length > 8 && losOverlaysData[i].Length % 2 == 0)
+                        {
+                            for (var j = 9; j+1 < losOverlaysData[i].Length; j += 2)
+                            {
+                                bool abeeette = allVarReturn(losOverlaysData[i][j]) == int.Parse(losOverlaysData[i][j + 1]);
+                                Logger.Log(LogLevel.Info, "aeienre "+j+" aa "+abeeette);
+                                if (!abeeette)
+                                {
+                                    abettttt = false;
+                                    break;
+                                }
+                            }
+                        }
                         losOverlays[i].pos = new Vector2(self.manager.rainWorld.options.ScreenSize.x / 7f * 2f - 50f + int.Parse(losOverlaysData[i][4]), (abettttt ? self.manager.rainWorld.options.ScreenSize.y * 0.7f + int.Parse(losOverlaysData[i][5]) : 2000));
                         if (abettttt)
                         {

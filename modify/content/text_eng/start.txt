@@ -1,2 +1,8 @@
+[FIND]You
+[ADDBEFORE_01]\n
+[FIND]North
+[ADDBEFORE_01]\n
 [FIND]down_1.txt
 [ADDAFTER]\nTo The Pants Store\npantsstore_1.txt
+[FIND]RW_42 - Kayava
+[ADDBEFORE_01]\n
