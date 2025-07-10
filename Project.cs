@@ -47,7 +47,7 @@ namespace DatingUtils
         }
     }
 
-    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.1")]
+    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.2")]
     internal class Plugin : BaseUnityPlugin
     {
         public const string MOD_ID = "nassoc.datingutils";
