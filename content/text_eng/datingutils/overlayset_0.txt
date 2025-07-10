@@ -1,44 +1,111 @@
+// Any line starting with two dashes and a space (// ) or is empty is seen as a comment,
+// and thus is not calculated.
 has_pants 1 agony pants_overlaypants 50 -100
 has_hat 1 agony pants_overlayhat 80 40
+has_pants 1 agony pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 blush pants_overlaypants 50 -100
 has_hat 1 blush pants_overlayhat 80 40
+has_pants 1 blush pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 redeye pants_overlaypants 50 -100
 has_hat 1 redeye pants_overlayhat 80 40
+has_pants 1 redeye pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 rvsof pants_overlaypants 50 -100
 has_hat 1 rvsof pants_overlayhat 80 40
+has_pants 1 rvsof pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm1 pants_overlaypants 50 -100
 has_hat 1 sm1 pants_overlayhat 80 40
+has_pants 1 sm1 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm2 pants_overlaypants 30 -100
 has_hat 1 sm2 pants_overlayhat 60 40
+has_pants 1 sm2 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm3 pants_overlaypants 30 -80
 has_hat 1 sm3 pants_overlayhat 60 60
+has_pants 1 sm3 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm4 pants_overlaypants 10 -100
 has_hat 1 sm4 pants_overlayhat 40 40
+has_pants 1 sm4 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm5 pants_overlaypants 50 -100
 has_hat 1 sm5 pants_overlayhat 80 40
+has_pants 1 sm5 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm5b pants_overlaypants 50 -100
 has_hat 1 sm5b pants_overlayhat 80 40
+has_pants 1 sm5b pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm6 pants_overlaypants -10 -100
 has_hat 1 sm6 pants_overlayhat 20 40
+has_pants 1 sm6 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm7 pants_overlaypants -10 -100
 has_hat 1 sm7 pants_overlayhat 20 40
+has_pants 1 sm7 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm7b pants_overlaypants 50 -100
 has_hat 1 sm7b pants_overlayhat 80 40
+has_pants 1 sm7b pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm8 pants_overlaypants 10 -100
 has_hat 1 sm8 pants_overlayhat 40 40
+has_pants 1 sm8 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm9 pants_overlaypants 50 -100
 has_hat 1 sm9 pants_overlayhat 80 40
+has_pants 1 sm9 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm9b pants_overlaypants 50 -100
 has_hat 1 sm9b pants_overlayhat 80 40
+has_pants 1 sm9b pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm9c pants_overlaypants 50 -100
 has_hat 1 sm9c pants_overlayhat 80 40
+has_pants 1 sm9c pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm10 pants_overlaypants -10 -100
 has_hat 1 sm10 pants_overlayhat 20 40
+has_pants 1 sm10 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm11 pants_overlaypants 50 -100
 has_hat 1 sm11 pants_overlayhat 80 40
+has_pants 1 sm11 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm12 pants_overlaypants 50 -100
 has_hat 1 sm12 pants_overlayhat 80 40
+has_pants 1 sm12 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 sm15 pants_overlaypants 50 -100
 has_hat 1 sm15 pants_overlayhat 80 40
+has_pants 1 sm15 pants_overlaycool 0 -100
+has_hat 1
+
 has_pants 1 superagony pants_overlaypants 50 -100
 has_hat 1 superagony pants_overlayhat 80 40
+has_pants 1 superagony pants_overlaycool 0 -100
+has_hat 1
