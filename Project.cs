@@ -47,7 +47,7 @@ namespace DatingUtils
         }
     }
 
-    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.2")]
+    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.3")]
     internal class Plugin : BaseUnityPlugin
     {
         public const string MOD_ID = "nassoc.datingutils";
@@ -539,7 +539,7 @@ namespace DatingUtils
                             }
                             else
                             {
-                                Plugin.Log(LogLevel.Info, "c overlayset_" + boogeru + " line "+i+" is length "+losOverlaysData.Length);
+                                //Plugin.Log(LogLevel.Info, "c overlayset_" + boogeru + " line "+i+" is length "+losOverlaysData.Length);
                             }
                         }
                         Plugin.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Overlayset \"overlayset_"+boogeru+"\" initialized!");
@@ -642,9 +642,14 @@ namespace DatingUtils
                     {
                         //Logger.Log(LogLevel.Info, "awawag " + losOverlaysData[i][2]+" "+losOverlaysData[i].Length);
                         bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
+                        if (abettttt)
+                        {
+                            Logger.Log(LogLevel.Info, "ajinito "+abettttt+" ggj "+losOverlaysData[i].Length+" "+(losOverlaysData[i].Length % 2));
+                        }
+
                         if (abettttt && losOverlaysData[i].Length > 8 && losOverlaysData[i].Length % 2 == 0)
                         {
-                            for (var j = 9; j+1 < losOverlaysData[i].Length; j += 2)
+                            for (var j = 8; j+1 < losOverlaysData[i].Length; j += 2)
                             {
                                 bool abeeette = allVarReturn(losOverlaysData[i][j]) == int.Parse(losOverlaysData[i][j + 1]);
                                 Logger.Log(LogLevel.Info, "aeienre "+j+" aa "+abeeette);
