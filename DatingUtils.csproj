@@ -10,8 +10,8 @@
 		<ProjectGuid>{A0A48B0C-3A17-4672-BADD-373B0A628D8B}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>src</RootNamespace>
-		<AssemblyName>src</AssemblyName>
+		<RootNamespace>DatingUtils</RootNamespace>
+		<AssemblyName>DatingUtils</AssemblyName>
 		<FileAlignment>512</FileAlignment>
 		<LangVersion>latest</LangVersion>
 		<Configurations>DatingUtils</Configurations>
@@ -238,7 +238,7 @@
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 	<PropertyGroup>
-	  <PostBuildEvent>xcopy /Y /I "$(TargetDir)$(TargetFileName)" "$(ProjectDir)plugins\src.dll"</PostBuildEvent>
+	  <PostBuildEvent>xcopy /Y /I "$(TargetDir)$(TargetFileName)" "$(ProjectDir)plugins\DatingUtils.dll"</PostBuildEvent>
 	</PropertyGroup>
 	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -41,13 +41,16 @@ namespace DatingUtils
             public int typeOf = -1;
             public string whichVar = "-1";
             public int setToWhat = -1;
+            public int minOrMax = 69420;
             public string[] whichVarInVarSet;
             public int[] setToWhatInVarSet;
+            public int[] minOrMaxInVarSet;
+            public int[] commandIsWhatInVarSet;
             public bool dead = false;
         }
     }
 
-    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.3")]
+    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.4")]
     internal class Plugin : BaseUnityPlugin
     {
         public const string MOD_ID = "nassoc.datingutils";
@@ -148,8 +151,8 @@ namespace DatingUtils
             for (int i = 0; i < self.messageButtons.Count; i++)
             {
                 char[] myArray = self.messageButtons[i].menuLabel.text.ToCharArray();
-                bool[] isWorking = [true,true,true,true];
-                int[] sset = [5,8,7,10];
+                bool[] isWorking = [true,true,true,true,true];
+                int[] sset = [5,8,7,10,8];
                 for (int j = 1; j < Math.Min(myArray.Length,9); j++)
                 {
                     if (j <= 3 && myArray[j] != "[var".ToCharArray()[j])
@@ -168,18 +171,23 @@ namespace DatingUtils
                     {
                         isWorking[3] = false;
                     }
+                    if (j <= 6 && myArray[j] != "[varadd".ToCharArray()[j])
+                    {
+                        isWorking[4] = false;
+                    }
 
-                    if (isWorking == new[] {false, false, false, false})
+                    if (isWorking == new[] {false, false, false, false, false})
                     {
                         Log("im not doing moss " + self.messageButtons[i].menuLabel.text);
                         break;
                     }
                 }
 
-                if (!self.messageButtons[i].GetCustomData().dead && isWorking != new[] {false, false, false, false} && self.messageButtons[i].menuLabel.text.ToCharArray()[0].ToString() == "[")
+                if (!self.messageButtons[i].GetCustomData().dead && isWorking != new[] {false, false, false, false, false} && self.messageButtons[i].menuLabel.text.ToCharArray()[0].ToString() == "[")
                 {
                     int numm = -1;
-                    for (var j = 3; j > -1; j--)
+                    // note to self: add a number to the "for (var j = #" every time you add a new command
+                    for (var j = 4; j > -1; j--)
                     {
                         if (isWorking[j])
                         {
@@ -192,9 +200,10 @@ namespace DatingUtils
                     self.messageButtons[i].GetCustomData().typeOf = numm;
                     self.messageButtons[i].GetCustomData().whichVar = stringToSmol(string.Join("", myArray).Trim(), sset[numm], filename);
                     //Logger.Log(LogLevel.Info, "EEE " + numm + " " + self.messageButtons[i].GetCustomData().whichVar + " " + string.Join("", myArray).Trim() + " " + sset[numm]);
-                    if (numm == 0 || numm == 2)
+                    if (numm == 0 || numm == 2 || numm == 4)
                     {
-                        self.messageButtons[i].GetCustomData().setToWhat = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + 1, filename);
+                        //Logger.Log(LogLevel.Info, "jug of mug "+numm+" "+sset[numm] + " " + self.messageButtons[i].GetCustomData().whichVar + " " + self.messageButtons[i].GetCustomData().whichVar.Length);
+                        self.messageButtons[i].GetCustomData().setToWhat = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + 1, filename,1);
                         if (numm == 2)
                         {
                             int myBul = allVarReturn(self.messageButtons[i].GetCustomData().whichVar);
@@ -204,6 +213,14 @@ namespace DatingUtils
                                 begoneThee = true;
                             }
                             Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Check \""+self.messageButtons[i].menuLabel.text+"\" (var \""+self.messageButtons[i].GetCustomData().whichVar+"\"=="+self.messageButtons[i].GetCustomData().setToWhat+") came back with "+myeBool+" (var returned "+myBul+")");
+                        }
+                        if (numm == 4 && string.Join("", myArray).Trim()[sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + self.messageButtons[i].GetCustomData().setToWhat.ToString().Length + 1].ToString() != "]")
+                        {
+                            self.messageButtons[i].GetCustomData().minOrMax = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + self.messageButtons[i].GetCustomData().setToWhat.ToString().Length + 2, filename,2);
+                        }
+                        else
+                        {
+                            self.messageButtons[i].GetCustomData().minOrMax = 69420;
                         }
                     }
                     else
@@ -258,18 +275,53 @@ namespace DatingUtils
                             {
                                 self.messageButtons[i].GetCustomData().whichVarInVarSet = [];
                                 self.messageButtons[i].GetCustomData().setToWhatInVarSet = [];
-                                foreach (string filee in fileArray)
+                                for (int filee = 0;filee< fileArray.Length;filee++)
                                 {
-                                    string returnString = stringToSmol(filee.Trim(), 0, filename);
-                                    int returnNum = stringToNumber(filee.Trim(), returnString.Length+1, filename);
-                                    self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
-                                    self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
+                                    string[] jolan = fileArray[filee].Trim().Split(" ".ToCharArray());
+                                    if (jolan.Length > 1 && jolan[0] != "//")
+                                    {
+                                        if (jolan.Length == 2)
+                                        {
+                                            string returnString = stringToSmol(jolan[0], 0, filename);
+                                            int returnNum = stringToNumber(jolan[1], 0, filename,3);
+                                            self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
+                                            self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
+                                            self.messageButtons[i].GetCustomData().commandIsWhatInVarSet = self.messageButtons[i].GetCustomData().commandIsWhatInVarSet.AddItem(0).ToArray();
+                                        }
+                                        else if (jolan.Length == 3 || jolan.Length == 4)
+                                        {
+                                            if (jolan[0] == "varadd")
+                                            {
+                                                string returnString = stringToSmol(jolan[1], 0, filename);
+                                                int returnNum = stringToNumber(jolan[2], 0, filename,4);
+                                                self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
+                                                self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
+                                                if (jolan.Length == 4)
+                                                {
+                                                    self.messageButtons[i].GetCustomData().minOrMaxInVarSet = self.messageButtons[i].GetCustomData().commandIsWhatInVarSet.AddItem(stringToNumber(jolan[3], 0, filename,5)).ToArray();
+                                                }
+                                                else
+                                                {
+                                                    self.messageButtons[i].GetCustomData().minOrMaxInVarSet = self.messageButtons[i].GetCustomData().commandIsWhatInVarSet.AddItem(69420).ToArray();
+                                                }
+                                                self.messageButtons[i].GetCustomData().commandIsWhatInVarSet = self.messageButtons[i].GetCustomData().commandIsWhatInVarSet.AddItem(1).ToArray();
+                                            }
+                                            else
+                                            {
+                                                Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in an invalid line in the Varset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/varset_"+self.messageButtons[i].GetCustomData().whichVar+".txt\" line "+filee+" has 3/4 entries, but the first one is not \"varadd\".");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in an invalid line in the Varset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/varset_"+self.messageButtons[i].GetCustomData().whichVar+".txt\" line "+filee+" has "+jolan.Length+" entries instead of 2 or 3.");
+                                        }
+                                    }
                                 }
                             }
                         }
                         else if (numm == 3)
                         {
-                            self.messageButtons[i].GetCustomData().setToWhat = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + 1, filename);
+                            self.messageButtons[i].GetCustomData().setToWhat = stringToNumber(string.Join("", myArray).Trim(), sset[numm] + self.messageButtons[i].GetCustomData().whichVar.Length + 1, filename,6);
                             begoneThee = true;
                             string path = AssetManager.ResolveFilePath(string.Concat(new string[]
                             {
@@ -322,7 +374,7 @@ namespace DatingUtils
                                 foreach (string filee in fileArray)
                                 {
                                     string returnString = stringToSmol(filee, 0, filename);
-                                    int returnNum = stringToNumber(filee, returnString.Length+1, filename);
+                                    int returnNum = stringToNumber(filee, returnString.Length+1, filename, 7);
                                     //Logger.Log(LogLevel.Info, "AAAAA "+returnString+" "+returnNum);
                                     self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
                                     self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
@@ -336,11 +388,13 @@ namespace DatingUtils
                                     Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Checkset \""+self.messageButtons[i].menuLabel.text+"\" check #"+j+" (var \""+self.messageButtons[i].GetCustomData().whichVarInVarSet[j]+"\"=="+self.messageButtons[i].GetCustomData().setToWhatInVarSet[j]+") came back with "+laBool+" (var returned "+aBul+")");
                                     if (!laBool && self.messageButtons[i].GetCustomData().setToWhat != 1)
                                     {
+                                        // AND checkset
                                         begoneThee = true;
                                         break;
                                     }
                                     if (laBool && self.messageButtons[i].GetCustomData().setToWhat == 1)
                                     {
+                                        // OR checkset
                                         begoneThee = false;
                                         break;
                                     }
@@ -586,23 +640,95 @@ namespace DatingUtils
                 switch (Datta.typeOf)
                 {
                     case 0:
+                    {
                         allVariables[Datta.whichVar] = Datta.setToWhat;
                         Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Set variable \""+Datta.whichVar+"\" to "+Datta.setToWhat);
                         break;
+                    }
                     case 1:
-                        for (int i = 0; i<Math.Min(Datta.whichVarInVarSet.Length,Datta.setToWhatInVarSet.Length); i++)
+                    {
+                        for (int i = 0; i<Math.Min(Datta.whichVarInVarSet.Length,Math.Min(Datta.setToWhatInVarSet.Length,Datta.commandIsWhatInVarSet.Length)); i++)
                         {
-                            //if (allVariables.ContainsKey(Datta.whichVarInVarSet[i]))
-                            //{
-                                allVariables[Datta.whichVarInVarSet[i]] = Datta.setToWhatInVarSet[i];
-                                Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Set variable \""+Datta.whichVarInVarSet[i]+"\" to "+Datta.setToWhatInVarSet[i]);
-                            //}
-                            //else
-                            //{
-                            //    Logger.Log(LogLevel.Error, "[NonIdiot's DatingUtils] EXCEPTION! Setting variable \""+Datta.whichVarInVarSet[i]+"\" to "+Datta.setToWhatInVarSet[i]+" failed!");
-                            //}
+                            switch (Datta.commandIsWhatInVarSet[i])
+                            {
+                                case 0:
+                                {
+                                    allVariables[Datta.whichVarInVarSet[i]] = Datta.setToWhatInVarSet[i];
+                                    Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Set variable \""+Datta.whichVarInVarSet[i]+"\" to "+Datta.setToWhatInVarSet[i]);
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    if (Datta.minOrMaxInVarSet[i] == 69420)
+                                    {
+                                        if (allVariables.ContainsKey(Datta.whichVarInVarSet[i]))
+                                        {
+                                            allVariables[Datta.whichVarInVarSet[i]] += Datta.setToWhatInVarSet[i];
+                                        }
+                                        else
+                                        {
+                                            allVariables[Datta.whichVarInVarSet[i]] = Datta.setToWhatInVarSet[i];
+                                        }
+                                        Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Added variable \""+Datta.whichVarInVarSet[i]+"\" with "+Datta.setToWhatInVarSet[i]+" to make it become "+allVariables[Datta.whichVarInVarSet[i]]);
+                                    }
+                                    else
+                                    {
+                                        if (allVariables.ContainsKey(Datta.whichVarInVarSet[i]))
+                                        {
+                                            allVariables[Datta.whichVarInVarSet[i]] = (Datta.minOrMaxInVarSet[i] > 0 ? Math.Min(allVariables[Datta.whichVarInVarSet[i]]+Datta.setToWhatInVarSet[i],Datta.minOrMaxInVarSet[i]) : Math.Max(allVariables[Datta.whichVarInVarSet[i]]+Datta.setToWhatInVarSet[i],Datta.minOrMaxInVarSet[i]));
+                                        }
+                                        else
+                                        {
+                                            allVariables[Datta.whichVarInVarSet[i]] = (Datta.minOrMaxInVarSet[i] > 0 ? Math.Min(Datta.setToWhatInVarSet[i],Datta.minOrMaxInVarSet[i]) : Math.Max(Datta.setToWhatInVarSet[i],Datta.minOrMaxInVarSet[i]));
+                                        }
+                                        Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Added variable \""+Datta.whichVarInVarSet[i]+"\" with "+Datta.setToWhatInVarSet[i]+" (limited to a "+(Datta.minOrMaxInVarSet[i] > 0 ? "max":"min")+" of "+Datta.minOrMaxInVarSet[i]+") to make it become "+allVariables[Datta.whichVarInVarSet[i]]);
+                                    }
+                                    break;
+                                }
+                                default:
+                                {
+                                    Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Somehow, reading a Varset on the button that was last pressed resulted in a command index of "+Datta.commandIsWhatInVarSet[i]+", which doesn't exist.");
+                                    break;
+                                }
+                                //}
+                                //else
+                                //{
+                                //    Logger.Log(LogLevel.Error, "[NonIdiot's DatingUtils] EXCEPTION! Setting variable \""+Datta.whichVarInVarSet[i]+"\" to "+Datta.setToWhatInVarSet[i]+" failed!");
+                                //}
+                            }
                         }
                         break;
+                    }
+                    case 4:
+                    {
+                        if (Datta.minOrMax == 69420)
+                        {
+                            if (allVariables.ContainsKey(Datta.whichVar))
+                            {
+                                allVariables[Datta.whichVar] += Datta.setToWhat;
+                            }
+                            else
+                            {
+                                allVariables[Datta.whichVar] = Datta.setToWhat;
+                            }
+                            Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Added variable \""+Datta.whichVar+"\" with "+Datta.setToWhat+" to make it become "+allVariables[Datta.whichVar]);
+                        }
+                        else
+                        {
+                            // was gonna do something where if you did a negative number, it would constrain between -|number| and |number|,
+                            // and if you did a positive number, it would constrain out of that range, but it was too unclear so i scrapped it
+                            if (allVariables.ContainsKey(Datta.whichVar))
+                            {
+                                allVariables[Datta.whichVar] = (Datta.minOrMax > 0 ? Math.Min(allVariables[Datta.whichVar]+Datta.setToWhat,Datta.minOrMax) : Math.Max(allVariables[Datta.whichVar]+Datta.setToWhat,Datta.minOrMax));
+                            }
+                            else
+                            {
+                                allVariables[Datta.whichVar] = (Datta.minOrMax > 0 ? Math.Min(Datta.setToWhat,Datta.minOrMax) : Math.Max(Datta.setToWhat,Datta.minOrMax));
+                            }
+                            Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Added variable \""+Datta.whichVar+"\" with "+Datta.setToWhat+" (limited to a "+(Datta.minOrMax > 0 ? "max":"min")+" of "+Datta.minOrMax+") to make it become "+allVariables[Datta.whichVar]);
+                        }
+                        break;
+                    }
                 }
 
                 /*for (int k = 0; k < self.messageButtons.Count; k++)
@@ -750,17 +876,20 @@ namespace DatingUtils
         }
 
         // has a limit of 7 characters just to make sure it doesn't go above 9 :troll:
-        public static int stringToNumber(string charArray, int startIndex, string fileName)
+        public static int stringToNumber(string charArray, int startIndex, string fileName, int errorCode)
         {
             string fullString = "";
             for (var i = startIndex; i < Math.Min(charArray.Length,startIndex+7); i++)
             {
-                if (charArray[i].ToString().IsNullOrWhiteSpace() || charArray[i].ToString() == "]")
+                //Plugin.Log(LogLevel.Info, "aunt "+i+" "+startIndex);
+                if ((i>startIndex && charArray[i].ToString().IsNullOrWhiteSpace()) || charArray[i].ToString() == "]")
                 {
                     break;
                 }
-
-                fullString += charArray[i];
+                if (!charArray[i].ToString().IsNullOrWhiteSpace())
+                {
+                    fullString += charArray[i];
+                }
             }
 
             if (fullString != "")
@@ -772,12 +901,12 @@ namespace DatingUtils
                 }
                 catch (Exception ex)
                 {
-                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" resulted in an error: "+ex.ToString());
+                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" on string \""+charArray+"\" at index "+startIndex+" resulted in an error with ErrorCode 00"+errorCode+": "+ex.ToString());
                 }
             }
             else
             {
-                Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" in string \""+charArray+"\" starting at index "+startIndex+" resulted in not finding a usable integer.");
+                Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" in string \""+charArray+"\" starting at index "+startIndex+" resulted in not finding a usable integer. ErrorCode 01"+errorCode);
             }
 
             return -1;

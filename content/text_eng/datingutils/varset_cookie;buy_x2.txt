@@ -1,0 +1,2 @@
+varadd cookie;cookies -50
+cookie;has_x2 1

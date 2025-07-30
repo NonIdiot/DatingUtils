@@ -1,0 +1,9 @@
+pants_sm7
+pants_cookie
+
+You click the cookie, and your number goes up.
+
+[varadd cookie;cookies 2]Click the button (x2)
+pantsstore_cookieclicker_main_2.txt
+Go to the shop
+pantsstore_cookieclicker_shop.txt

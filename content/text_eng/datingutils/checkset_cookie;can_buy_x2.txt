@@ -1,0 +1,2 @@
+cookie;cookies 50 9999
+cookie;has_x2 0

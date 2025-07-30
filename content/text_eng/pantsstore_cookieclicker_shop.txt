@@ -1,0 +1,13 @@
+pants_sm7
+pants_cashier
+
+You enter the Cookie Shop, a place where you can buy upgrades to your clicking.
+
+[check cookie;has_x2 0]Return to the clicking of cookies
+pantsstore_cookieclicker_main.txt
+[check cookie;has_x2 1]Return to the clicking of cookies
+pantsstore_cookieclicker_main_2.txt
+[checkset cookie;can_buy_x2 0]Buy the x2 Upgrade
+pantsstore_cookieclicker_x2.txt
+Leave
+pantsstore_1.txt

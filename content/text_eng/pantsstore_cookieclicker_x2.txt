@@ -1,0 +1,7 @@
+pants_sm7
+pants_cashier
+
+Hurrah! You now have the x2 Upgrade.
+
+[varset cookie;buy_x2] Return to the shop
+pantsstore_cookieclicker_shop.txt

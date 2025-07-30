@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("src")]
+[assembly: AssemblyTitle("DatingUtils")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("nonAssociatedIdiot")]
-[assembly: AssemblyProduct("src")]
+[assembly: AssemblyProduct("DatingUtils")]
 [assembly: AssemblyCopyright("Copyright © nonAssociatedIdiot 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
