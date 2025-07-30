@@ -374,10 +374,13 @@ namespace DatingUtils
                                 foreach (string filee in fileArray)
                                 {
                                     string returnString = stringToSmol(filee, 0, filename);
-                                    int returnNum = stringToNumber(filee, returnString.Length+1, filename, 7);
-                                    //Logger.Log(LogLevel.Info, "AAAAA "+returnString+" "+returnNum);
-                                    self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
-                                    self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
+                                    if (stroin(returnString) != stroin("//"))
+                                    {
+                                        int returnNum = stringToNumber(filee, returnString.Length+1, filename, 7);
+                                        //Logger.Log(LogLevel.Info, "AAAAA "+returnString+" "+returnNum);
+                                        self.messageButtons[i].GetCustomData().whichVarInVarSet = self.messageButtons[i].GetCustomData().whichVarInVarSet.AddItem(returnString).ToArray();
+                                        self.messageButtons[i].GetCustomData().setToWhatInVarSet = self.messageButtons[i].GetCustomData().setToWhatInVarSet.AddItem(returnNum).ToArray();
+                                    }
                                 }
 
                                 //Logger.Log(LogLevel.Info, "AAAAE "+self.messageButtons[i].GetCustomData().whichVarInVarSet.Length);
@@ -588,7 +591,7 @@ namespace DatingUtils
                                 }
                                 else
                                 {
-                                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in a nonexistent Overlayset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/overlayset_"+boogeru+".txt\" line "+i+" has "+jaja.Length+" entries instead of 6.");
+                                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+filename+" resulted in a nonexistent Overlayset. File \"content/text_"+self.manager.rainWorld.inGameTranslator.currentLanguage+"/datingutils/overlayset_"+boogeru+".txt\" line "+i+" has "+jaja.Length+" entries instead of 6 or 2.");
                                 }
                             }
                             else
@@ -639,12 +642,14 @@ namespace DatingUtils
                 //Logger.Log(LogLevel.Info, Datta.typeOf);
                 switch (Datta.typeOf)
                 {
+                    // Runs when a button with a var command is pressed
                     case 0:
                     {
                         allVariables[Datta.whichVar] = Datta.setToWhat;
                         Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Set variable \""+Datta.whichVar+"\" to "+Datta.setToWhat);
                         break;
                     }
+                    // Runs when a button with a varset command is pressed
                     case 1:
                     {
                         for (int i = 0; i<Math.Min(Datta.whichVarInVarSet.Length,Math.Min(Datta.setToWhatInVarSet.Length,Datta.commandIsWhatInVarSet.Length)); i++)
@@ -699,6 +704,7 @@ namespace DatingUtils
                         }
                         break;
                     }
+                    // Runs when a button with a varadd command is pressed
                     case 4:
                     {
                         if (Datta.minOrMax == 69420)

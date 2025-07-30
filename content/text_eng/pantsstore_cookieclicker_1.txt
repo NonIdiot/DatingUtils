@@ -4,5 +4,5 @@ pants_cookie
 You find the Cookie Clicker, a place where you can click as many cookies as you want.
 In front of you is a cookie that you can click.
 
-Click the button (x1)
+[varadd cookie;cookies 1 50]Click the button (x1)
 pantsstore_cookieclicker_main.txt
