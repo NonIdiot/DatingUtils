@@ -50,7 +50,7 @@ namespace DatingUtils
         }
     }
 
-    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.4")]
+    [BepInPlugin(MOD_ID, "NonIdiot's Dating Sim Utils", "1.0.5")]
     internal class Plugin : BaseUnityPlugin
     {
         public const string MOD_ID = "nassoc.datingutils";
@@ -432,18 +432,42 @@ namespace DatingUtils
                     self.messageButtons[num6].SetSize(new Vector2(num7, 30f));
                 }
             }
+            /*
+            int[] prenum4 = [];
+            float prenum8 = 0f;
+            for (int prenum9 = 0; prenum9 < self.messageButtons.Count; prenum9++)
+            {
+                if (!self.messageButtons[prenum9].GetCustomData().dead)
+                {
+                    prenum8 += self.messageButtons[prenum9].size.x + 10f;
+                    if (prenum9 + 1 < self.messageButtons.Count && prenum8 + self.messageButtons[prenum9].size.x + 30 > self.manager.rainWorld.options.ScreenSize.x/2)
+                    {
+                        prenum4 = prenum4.AddToArray(prenum9);
+                    }
+                }
+            }
+            */
             float num8 = 0f;
             for (int num9 = 0; num9 < self.messageButtons.Count; num9++)
             {
                 if (!self.messageButtons[num9].GetCustomData().dead)
                 {
+                    /*
+                    for (int num10 = 0; num10 < prenum4.Length; num10++)
+                    {
+                        if (prenum4[num10] == num9 - 1)
+                        {
+
+                        }
+                    }
+                    */
                     self.messageButtons[num9].pos.x = self.manager.rainWorld.options.ScreenSize.x * 0.5f - num5 * 0.5f +
                                                       num8 + (1366f - self.manager.rainWorld.options.ScreenSize.x) / 2f;
                     num8 += self.messageButtons[num9].size.x + 10f;
                 }
             }
             
-            // File pre-loading for all Overlay-related stuff
+            // File preloading for all Overlay-related stuff
             string path2 = AssetManager.ResolveFilePath(string.Concat(new string[]
             {
                 "Content",
@@ -604,7 +628,7 @@ namespace DatingUtils
                 }
                 
             }
-            
+
             // Overlay data application (for when there is OverlayData but not Overlays)
             if (losOverlaysData.Length > losOverlays.Length)
             {
@@ -622,15 +646,187 @@ namespace DatingUtils
                     self.pages[0].subObjects.Add(losOverlays[losOverlays.Length - 1]);
                 }
             }
+            
+            // Line Check stuffamajigs
+            string[] woga2 = ["[linecheck ","[linecheckset "];
+            bool[] bonanar2 = [true, true];
+            int moveItBack = 0;
+            if (whereOverlayLine != -1)
+            {
+                for (int i = whereOverlayLine + 1; i < array.Length; i++)
+                {
+                    if (array[i].Length <= 1)
+                    {
+                        break;
+                    }
+                    if (woga2[0].Length + 2 <= array[i].Length)
+                    {
+                        bonanar2 = [true, true];
+                        for (int k = 0; k < woga2.Length; k++)
+                        {
+                            for (int j=0;j<Math.Min(array[i].Length,woga2[k].Length);j++)
+                            {
+                                if (array[i][j] != woga2[k][j])
+                                {
+                                    bonanar2[k] = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (bonanar2[1] || bonanar2[0])
+                        {
+                            bool myeBool = true;
+                            if (bonanar2[1])
+                            {
+                                // for Linechecksets
+                                //Logger.Log(LogLevel.Info, "linecheckset 1");
+                                string returnString2 = stringToSmol(array[i], 14, filename);
+                                int returnNumber2 = (stringToSmol(array[i], 14+returnString2.Length, filename).StartsWith("[") ? 0 : stringToNumber(array[i], 14+returnString2.Length+1, filename, 10));
+                                string path = AssetManager.ResolveFilePath(string.Concat(new string[]
+                                {
+                                    "Content",
+                                    Path.DirectorySeparatorChar.ToString(),
+                                    "text_",
+                                    LocalizationTranslator.LangShort(self.manager.rainWorld.inGameTranslator.currentLanguage),
+                                    Path.DirectorySeparatorChar.ToString(),
+                                    "datingutils",
+                                    Path.DirectorySeparatorChar.ToString(),
+                                    "checkset_",
+                                    returnString2,
+                                    ".txt",
+                                }));
+                                //Logger.Log(LogLevel.Info, "linecheckset 2");
+                                string[] fileArray = [];
+                                if (File.Exists(path))
+                                {
+                                    fileArray = File.ReadAllLines(path);
+                                }
+                                else
+                                {
+                                    path = AssetManager.ResolveFilePath(string.Concat(new string[]
+                                    {
+                                        "Content",
+                                        Path.DirectorySeparatorChar.ToString(),
+                                        "text_",
+                                        LocalizationTranslator.LangShort(InGameTranslator.LanguageID.English),
+                                        Path.DirectorySeparatorChar.ToString(),
+                                        "datingutils",
+                                        Path.DirectorySeparatorChar.ToString(),
+                                        "checkset_",
+                                        returnString2,
+                                        ".txt",
+                                    }));
+                                    if (File.Exists(path))
+                                    {
+                                        //Logger.Log(LogLevel.Info, "linecheckset 2");
+                                        fileArray = File.ReadAllLines(path);
+                                    }
+                                    else
+                                    {
+                                        Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading a Linecheckset in file "+filename+" resulted in a nonexistent Checkset. Does file \"content/text_"+LocalizationTranslator.LangShort(InGameTranslator.LanguageID.English)+"/datingutils/checkset_"+returnString2+".txt\" exist?");
+                                    }
+                                }
+                                
+                                if (fileArray.Length > 0)
+                                {
+                                    //Logger.Log(LogLevel.Info, "linecheckset 3");
+                                    int whichCheckNum = -1;
+                                    foreach (string filee in fileArray)
+                                    {
+                                        string returnString = stringToSmol(filee, 0, filename);
+                                        //Logger.Log(LogLevel.Info, "linecheckset 4");
+                                        if (stroin(returnString) != stroin("//"))
+                                        {
+                                            whichCheckNum++;
+                                            int returnNum = stringToNumber(filee, returnString.Length+1, filename, 9);
+                                            //Logger.Log(LogLevel.Info, "AAAAA "+returnString+" "+returnNum);
+                                            int aBul = allVarReturn(returnString);
+                                            bool laBool = (aBul == returnNum);
+                                            Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Checkset \""+array[i]+"\" check #"+whichCheckNum+" (var \""+returnString+"\"=="+returnNum+") for a Linecheckset came back with "+laBool+" (var returned "+aBul+")");
+                                            if (!laBool && returnNumber2 != 1)
+                                            {
+                                                // AND checkset
+                                                myeBool = false;
+                                                break;
+                                            }
+                                            if (laBool && returnNumber2 == 1)
+                                            {
+                                                // OR checkset
+                                                myeBool = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // for Linechecks
+                                string returnString2 = stringToSmol(array[i], 11, filename);
+                                int returnNumber2 = stringToNumber(array[i], 11+returnString2.Length+1, filename, 8);
+                                //Logger.Log(LogLevel.Info, "return is "+returnString2+" num is "+returnNumber2);
+                                myeBool = allVarReturn(returnString2) == returnNumber2;
+                                Logger.Log(LogLevel.Info, "[NonIdiot's DatingUtils] Linecheck \""+array[i]+"\" (var \""+returnString2+"\"=="+returnNumber2+") came back with "+myeBool+" (var returned "+allVarReturn(returnString2)+")");
+                            }
+                            if (!myeBool)
+                            {
+                                int iiReal = i - whereOverlayLine - moveItBack;// + 1
+                                //Logger.Log(LogLevel.Info,"norb "+(iiReal)+" "+self.messageLabels.Count);
+                                /*
+                                for (int j = 0; j < Math.Min(iiReal,self.messageLabels.Count); j++)
+                                {
+                                    self.messageLabels[j].text += " aaaaa";
+                                    if (self.messageLabels[j].pos.y < -999f)
+                                    {
+                                        //self.messageLabels[j].pos.y = self.manager.rainWorld.screenSize.y * 0.25f + self.totalHeight * 0.5f - MoreSlugcats.DatingSim.lineHeight * 0.6666f;
+                                    }
+                                    self.messageLabels[j].pos.y -= MoreSlugcats.DatingSim.lineHeight * 0.6666f;
+                                    self.messageLabels[j].GrafUpdate(0f);
+                                    self.messageLabels[j].Update();
+                                    self.messageLabels[j].label.Redraw(true,true);
+                                    Logger.Log(LogLevel.Info,self.messageLabels[j].pos.y+" "+j+" 1b");
+                                    //Logger.Log(LogLevel.Info,self.messageLabels[j].ScreenPos.y+" "+j+" 2b");
+                                    //Logger.Log(LogLevel.Info,self.messageLabels[j].label.y+" "+j+" 3b");
+                                }*/
+                                //Logger.Log(LogLevel.Info,self.messageLabels.Count+" "+Math.Min(iiReal,self.messageLabels.Count-1)+" 5b");//self.messageLabels[Math.Min(iiReal,self.messageLabels.Count-1)].pos.y+
+                                self.messages.RemoveAt(Math.Min(iiReal,self.messages.Count-1));
+                                self.messageLabels.RemoveAt(Math.Min(iiReal,self.messageLabels.Count-1));
+                                //self.messageLabels[Math.Min(iiReal,self.messageLabels.Count-1)].GrafUpdate(0f);
+                                //self.messageLabels[Math.Min(iiReal,self.messageLabels.Count-1)].Update();
+                                //self.messageLabels[Math.Min(iiReal,self.messageLabels.Count-1)].label.Redraw(true,true);
+                                for (int j = iiReal; j < self.messageWidths.Length - 1; j++)
+                                {
+                                    self.messageWidths[j] = self.messageWidths[j + 1];
+                                }
+                                moveItBack++;
+                            }
+                        }
+                    }
+                }
+                (self as Menu.Menu).GrafUpdate(0f);
+            }
 
             // Finally, applying the changes
             //Logger.Log(LogLevel.Info, "ua");
-            self.GrafUpdate(0f);
-            //Logger.Log(LogLevel.Info, "au");
-
+            for (int j = 0; j < self.messageLabels.Count; j++)
+            {
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].pos.y+" "+j+" 1z");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].ScreenPos.y+" "+j+" 2z");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].label.y+" "+j+" 3z");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].DrawPos(0f).y+" "+j+" 4z");
+            }
             // General overlay application (showing the overlays)
             shouldAlsoLetUpdateWork = true;
             shouldILetGrafUpdateWork = true;
+            self.GrafUpdate(0f);
+            for (int j = 0; j < self.messageLabels.Count; j++)
+            {
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].pos.y+" "+j+" 1a");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].ScreenPos.y+" "+j+" 2a");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].label.y+" "+j+" 3a");
+                //Logger.Log(LogLevel.Info,self.messageLabels[j].DrawPos(0f).y+" "+j+" 4a");
+            }
+            //Logger.Log(LogLevel.Info, "au");
         }
 
         private void IPressButton(DatingSim.orig_Singal orig, MoreSlugcats.DatingSim self, MenuObject sender, string message)
@@ -776,7 +972,7 @@ namespace DatingUtils
                         bool abettttt = allVarReturn(losOverlaysData[i][0]) == int.Parse(losOverlaysData[i][1]) && self.slugcat.fileName == (losOverlaysData[i][2].Contains("_anim_") ? losOverlaysData[i][2].Split("_".ToCharArray())[0] : losOverlaysData[i][2]);
                         if (abettttt)
                         {
-                            Logger.Log(LogLevel.Info, "ajinito "+abettttt+" ggj "+losOverlaysData[i].Length+" "+(losOverlaysData[i].Length % 2));
+                            //Logger.Log(LogLevel.Info, "ajinito "+abettttt+" ggj "+losOverlaysData[i].Length+" "+(losOverlaysData[i].Length % 2));
                         }
 
                         if (abettttt && losOverlaysData[i].Length > 8 && losOverlaysData[i].Length % 2 == 0)
@@ -784,7 +980,7 @@ namespace DatingUtils
                             for (var j = 8; j+1 < losOverlaysData[i].Length; j += 2)
                             {
                                 bool abeeette = allVarReturn(losOverlaysData[i][j]) == int.Parse(losOverlaysData[i][j + 1]);
-                                Logger.Log(LogLevel.Info, "aeienre "+j+" aa "+abeeette);
+                                //Logger.Log(LogLevel.Info, "aeienre "+j+" aa "+abeeette);
                                 if (!abeeette)
                                 {
                                     abettttt = false;
@@ -898,7 +1094,7 @@ namespace DatingUtils
                 }
             }
 
-            if (fullString != "")
+            if (!fullString.IsNullOrWhiteSpace())
             {
                 //Plugin.Log(LogLevel.Info,fullString+" "+fullString.Length);
                 try
@@ -907,7 +1103,7 @@ namespace DatingUtils
                 }
                 catch (Exception ex)
                 {
-                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" on string \""+charArray+"\" at index "+startIndex+" resulted in an error with ErrorCode 00"+errorCode+": "+ex.ToString());
+                    Plugin.Log(LogLevel.Error,"[NonIdiot's DatingUtils] EXCEPTION! Reading file "+fileName+" on string \""+charArray+"\" at index "+startIndex+" (which returned "+fullString+") resulted in an error with ErrorCode 00"+errorCode+": "+ex.ToString());
                 }
             }
             else

@@ -2,12 +2,16 @@ sm1
 none
 
 Suddenly, a drip of wetness hits you. You look around and see that what you bought is now wet!
+[linecheck has_hat 1]Your hat also falls off from the wetness, and you put it back on.
+[linecheck has_hat 1]It feels... soggy.
+[linecheckset yes_pants_yes_hat]Alas, even the hats of cool people fall off sometimes...
+[linecheckset yes_pants_yes_hat 1]Well, at least you see a cave nearby. Perhaps it's best to go in.
 
-[checkset 0 0] Clean your pants and go into a nearby cave
+[checkset yes_pants_no_hat 0] Clean your pants and go into the cave
 east_2.txt
-[checkset 1 0] Clean your hat and go into a nearby cave
+[checkset no_pants_yes_hat 0] Clean your hat and go into the cave
 east_2.txt
-[checkset 2 0] Clean both your pants and hat and go into a nearby cave
+[checkset yes_pants_yes_hat 0] Clean both your pants and hat and go into the cave
 east_2.txt
-[checkset 3 0] what the fuck this shouldn't show up
+[checkset no_pants_no_hat 0] what the void fluid, this shouldn't show up
 east_2.txt
